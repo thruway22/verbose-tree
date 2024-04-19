@@ -38,7 +38,8 @@ def main():
     st.title('Saudi Stock Financial Ratios')
 
     try:
-        ticker_df = pd.read_csv('tickers.csv')
+        # Ensuring ticker symbols are read as strings
+        ticker_df = pd.read_csv('tickers.csv', dtype={'ticker': str})
         tickers = ticker_df['ticker'].tolist()
         df = fetch_data(tickers)
 
