@@ -21,7 +21,7 @@ def fetch_data(tickers):
             sales_to_price = revenue / price if price and revenue else None
             
             results.append({
-                'Ticker': ticker
+                'Ticker': ticker,
                 'Market Cap': market_cap,
                 'Book Value-to-Price Ratio': book_to_price,
                 'Earnings-to-Price Ratio': earnings_to_price,
