@@ -4,7 +4,7 @@ import pandas as pd
 
 # Function to fetch data and calculate ratios
 def fetch_data(tickers):
-    data = yf.download(tickers, period="1d", group_by='ticker')
+    data = yf.download(tickers, group_by='ticker')
     results = []
 
     for ticker in tickers:
