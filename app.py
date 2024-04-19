@@ -2,7 +2,8 @@ import yfinance as yf
 import streamlit as st
 import pandas as pd
 
-# Function to fetch data and calculate ratios
+# Caching the data fetching to avoid repeated downloads
+@st.cache
 def fetch_data(tickers):
     data = yf.download(tickers, period="1d", group_by='ticker')
     results = []
@@ -35,12 +36,22 @@ def fetch_data(tickers):
 # Streamlit app
 def main():
     st.title('Saudi Stock Financial Ratios')
-    
-    # Reading tickers from a CSV file
+
     try:
         ticker_df = pd.read_csv('tickers.csv')
-        tickers = ticker_df['ticker'].apply(lambda x: str(x) + ".SR").tolist()
+        tickers = ticker_df['ticker'].tolist()
         df = fetch_data(tickers)
+
+        # Checkbox to remove rows with None values
+        remove_none = st.checkbox("Remove rows with any None values", False)
+        if remove_none:
+            df = df.dropna()
+
+        # Slider to filter by market cap
+        max_market_cap = st.number_input('Maximum Market Cap (Enter 0 for no limit)', min_value=0, value=0, step=1000000)
+        if max_market_cap > 0:
+            df = df[df['Market Cap'] <= max_market_cap]
+
         st.dataframe(df)
     except Exception as e:
         st.error(f"Failed to read tickers from file: {e}")
